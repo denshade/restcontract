@@ -17,6 +17,9 @@ class ContractLine:
 class Contract:
     contract_lines = []
 
+    def of(self, json):
+        return Contract([])
+
     def __init__(self, contract_lines):
         self.contract_lines = contract_lines
 
@@ -188,3 +191,7 @@ def load(base_path):
     # server_version_in_environment
     server_version_in_environment_file = os.path.join(base_path, 'server_version_in_environment.json')
     server_version_in_environment = load_json_file(server_version_in_environment_file)
+
+
+def get_all_contracts():
+    return stored_contracts

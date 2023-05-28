@@ -2,6 +2,7 @@ import os
 import uuid
 import json
 from flask import Flask, request, jsonify
+import contracts
 
 app = Flask(__name__)
 data_directory = "data"
@@ -9,72 +10,61 @@ data_directory = "data"
 app = Flask(__name__)
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/contract', methods=['GET'])
+def get_contracts():
+    contracts.get_all_contracts()
+
+
+@app.route('/client/environment/{environment}/{version}', methods=['POST'])
+def store_client_version_env_info(environment, version):
+    contracts.move_client_version_to_environment(version, environment)
+    contracts.store("data")
+
+
+@app.route('/server/environment/{environment}/{version}', methods=['POST'])
+def store_server_version_env_info(environment, version):
+    contracts.set_server_version_for_environment(version, environment)
+    contracts.store("data")
+
+
+@app.route('/server/environment/{environment}', methods=['GET'])
+def get_server_version_for_environment(environment):
+    return contracts.get_server_version_for_environment(environment)
+
+
+@app.route('/client/environment/{environment}', methods=['GET'])
+def get_server_version_for_environment(environment):
+    return contracts.get_client_versions_in_environment(environment)
+
+
+@app.route('/server/validated-contract/{version}', methods=['POST'])
+def store_server_version_env_info(version):
+    pass
+
+@app.route('/server/validated-contract/{version}', methods=['POST'])
+def store_server_version_env_info(version):
+    pass
+
+@app.route('/server/environment/{environment}/{version}', methods=['POST'])
+def store_server_version_env_info(environment, version):
+    contracts.set_server_version_for_environment(version, environment)
+    contracts.store("data")
+
+
+
+@app.route('/contract', methods=['POST'])
 def upload():
     if not os.path.exists(data_directory):
         os.makedirs(data_directory)
 
-    try:
-        json_data = request.get_json()
-        if not json_data:
-            return jsonify({'error': 'Invalid JSON data.'}), 400
+    json_data = request.get_json()
+    if not json_data:
+        return jsonify({'error': 'Invalid JSON data.'}), 400
 
-        url = json_data.get('url')
-        response_data = json_data.get('response')
-
-        if not url or not response_data:
-            return jsonify({'error': 'URL and response data are required.'}), 400
-
-        file_name = str(uuid.uuid4()) + '.json'
-        file_path = os.path.join(data_directory, file_name)
-        if url and response_data:
-            def dynamic_endpoint():
-                return jsonify(response_data)
-
-            app.add_url_rule(url, view_func=dynamic_endpoint)
-        with open(file_path, 'w') as file:
-            json.dump(json_data, file)
-
-        return jsonify({'message': f'Successfully uploaded {file_name}.'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-def load_json_files():
-    if not os.path.exists(data_directory):
-        os.makedirs(data_directory)
-
-    json_files = [f for f in os.listdir(data_directory) if f.endswith(".json")]
-
-    for file_name in json_files:
-        try:
-            file_path = os.path.join(data_directory, file_name)
-            with open(file_path, 'r') as file:
-                json_data = json.load(file)
-
-            url = json_data.get('url')
-            response_data = json_data.get('response')
-
-            if url and response_data:
-                def dynamic_endpoint():
-                    return jsonify(response_data)
-
-                app.add_url_rule(url, view_func=dynamic_endpoint)
-        except Exception as e:
-            print(f"Error loading JSON file '{file_name}': {str(e)}")
-
-
-@app.route('/get/<string:file_name>', methods=['GET'])
-def get(file_name):
-    file_path = os.path.join(data_directory, file_name)
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as file:
-            json_data = json.load(file)
-            return jsonify({'data': json_data}), 200
-    else:
-        return jsonify({'error': 'File not found.'}), 404
+    contracts.store_contract(contracts.Contract.of(request.get_json()))
+    contracts.store("data")
 
 
 if __name__ == '__main__':
-    load_json_files()
+    contracts.load("data")
     app.run(debug=True)
