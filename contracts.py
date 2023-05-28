@@ -125,25 +125,31 @@ def clear():
     client_contracts_in_environment.clear()
 
 
-def store():
+def store(base_path):
     # stored_contracts
-    with open('stored_contracts.json', 'w') as file:
+    stored_contracts_file = os.path.join(base_path, 'stored_contracts.json')
+    with open(stored_contracts_file, 'w') as file:
         json.dump(stored_contracts, file)
 
     # supported_version_to_contract_hash_set_clients
-    with open('supported_version_to_contract_hash_set_clients.json', 'w') as file:
+    supported_version_to_contract_hash_set_clients_file = os.path.join(base_path,
+                                                                       'supported_version_to_contract_hash_set_clients.json')
+    with open(supported_version_to_contract_hash_set_clients_file, 'w') as file:
         json.dump(supported_version_to_contract_hash_set_clients, file)
 
     # client_contracts_in_environment
-    with open('client_contracts_in_environment.json', 'w') as file:
+    client_contracts_in_environment_file = os.path.join(base_path, 'client_contracts_in_environment.json')
+    with open(client_contracts_in_environment_file, 'w') as file:
         json.dump(client_contracts_in_environment, file)
 
     # server_version_to_contract
-    with open('server_version_to_contract.json', 'w') as file:
+    server_version_to_contract_file = os.path.join(base_path, 'server_version_to_contract.json')
+    with open(server_version_to_contract_file, 'w') as file:
         json.dump(server_version_to_contract, file)
 
     # server_version_in_environment
-    with open('server_version_in_environment.json', 'w') as file:
+    server_version_in_environment_file = os.path.join(base_path, 'server_version_in_environment.json')
+    with open(server_version_in_environment_file, 'w') as file:
         json.dump(server_version_in_environment, file)
 
 
@@ -155,24 +161,30 @@ def load_json_file(file_path):
         return None
 
 
-def load():
+def load(base_path):
     global stored_contracts
     global supported_version_to_contract_hash_set_clients
     global client_contracts_in_environment
     global server_version_to_contract
     global server_version_in_environment
+
     # stored_contracts
-    stored_contracts = load_json_file('stored_contracts.json')
+    stored_contracts_file = os.path.join(base_path, 'stored_contracts.json')
+    stored_contracts = load_json_file(stored_contracts_file)
 
     # supported_version_to_contract_hash_set_clients
-    supported_version_to_contract_hash_set_clients = load_json_file(
-        'supported_version_to_contract_hash_set_clients.json')
+    supported_version_to_contract_hash_set_clients_file = os.path.join(base_path,
+                                                                       'supported_version_to_contract_hash_set_clients.json')
+    supported_version_to_contract_hash_set_clients = load_json_file(supported_version_to_contract_hash_set_clients_file)
 
     # client_contracts_in_environment
-    client_contracts_in_environment = load_json_file('client_contracts_in_environment.json')
+    client_contracts_in_environment_file = os.path.join(base_path, 'client_contracts_in_environment.json')
+    client_contracts_in_environment = load_json_file(client_contracts_in_environment_file)
 
     # server_version_to_contract
-    server_version_to_contract = load_json_file('server_version_to_contract.json')
+    server_version_to_contract_file = os.path.join(base_path, 'server_version_to_contract.json')
+    server_version_to_contract = load_json_file(server_version_to_contract_file)
 
     # server_version_in_environment
-    server_version_in_environment = load_json_file('server_version_in_environment.json')
+    server_version_in_environment_file = os.path.join(base_path, 'server_version_in_environment.json')
+    server_version_in_environment = load_json_file(server_version_in_environment_file)
