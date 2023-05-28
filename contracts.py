@@ -1,4 +1,6 @@
 from typing import Dict, Any
+import os
+import json
 
 
 class ContractLine:
@@ -116,7 +118,61 @@ def check_client_can_move_to_environment(client_version, environment):
     return check_client_can_handle(contract.__hash__(), client_version)
 
 
+# manipulation of contracts and data.
 def clear():
     stored_contracts.clear()
     supported_version_to_contract_hash_set_clients.clear()
     client_contracts_in_environment.clear()
+
+
+def store():
+    # stored_contracts
+    with open('stored_contracts.json', 'w') as file:
+        json.dump(stored_contracts, file)
+
+    # supported_version_to_contract_hash_set_clients
+    with open('supported_version_to_contract_hash_set_clients.json', 'w') as file:
+        json.dump(supported_version_to_contract_hash_set_clients, file)
+
+    # client_contracts_in_environment
+    with open('client_contracts_in_environment.json', 'w') as file:
+        json.dump(client_contracts_in_environment, file)
+
+    # server_version_to_contract
+    with open('server_version_to_contract.json', 'w') as file:
+        json.dump(server_version_to_contract, file)
+
+    # server_version_in_environment
+    with open('server_version_in_environment.json', 'w') as file:
+        json.dump(server_version_in_environment, file)
+
+
+def load_json_file(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            return json.load(file)
+    else:
+        return None
+
+
+def load():
+    global stored_contracts
+    global supported_version_to_contract_hash_set_clients
+    global client_contracts_in_environment
+    global server_version_to_contract
+    global server_version_in_environment
+    # stored_contracts
+    stored_contracts = load_json_file('stored_contracts.json')
+
+    # supported_version_to_contract_hash_set_clients
+    supported_version_to_contract_hash_set_clients = load_json_file(
+        'supported_version_to_contract_hash_set_clients.json')
+
+    # client_contracts_in_environment
+    client_contracts_in_environment = load_json_file('client_contracts_in_environment.json')
+
+    # server_version_to_contract
+    server_version_to_contract = load_json_file('server_version_to_contract.json')
+
+    # server_version_in_environment
+    server_version_in_environment = load_json_file('server_version_in_environment.json')
