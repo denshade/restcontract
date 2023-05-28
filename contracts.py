@@ -31,8 +31,8 @@ server_version_in_environment = {}
 # contract retrieval
 
 def store_contract(contract):
-    stored_contracts[contract.__hash__()] = contract
-    return contract.__hash__()
+    stored_contracts[hash(contract)] = contract
+    return hash(contract)
 
 
 def get_contract_for(contract_hash):
@@ -107,7 +107,7 @@ def check_server_can_move_to_environment(server_version, environment):
     client_versions = get_client_versions_in_environment(environment)
     if len(client_versions) == 0:
         return True
-    supported_clients = [check_client_can_handle(contract.__hash__(), client_version) for client_version in
+    supported_clients = [check_client_can_handle(hash(contract), client_version) for client_version in
                          client_versions]
     return all(supported_clients)
 
@@ -115,7 +115,7 @@ def check_server_can_move_to_environment(server_version, environment):
 def check_client_can_move_to_environment(client_version, environment):
     server_version = get_server_version_for_environment(environment)
     contract = get_contract_for_server_version(server_version)
-    return check_client_can_handle(contract.__hash__(), client_version)
+    return check_client_can_handle(hash(contract), client_version)
 
 
 # manipulation of contracts and data.
