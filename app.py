@@ -16,13 +16,13 @@ def get_contracts():
 
 
 @app.route('/client/environment/{environment}/{version}', methods=['POST'])
-def store_client_version_env_info(environment, version):
+def move_client_version_to_environment(environment, version):
     contracts.move_client_version_to_environment(version, environment)
     contracts.store("data")
 
 
 @app.route('/server/environment/{environment}/{version}', methods=['POST'])
-def store_server_version_env_info(environment, version):
+def set_server_version_for_environment(environment, version):
     contracts.set_server_version_for_environment(version, environment)
     contracts.store("data")
 
@@ -33,16 +33,16 @@ def get_server_version_for_environment(environment):
 
 
 @app.route('/client/environment/{environment}', methods=['GET'])
-def get_server_version_for_environment(environment):
+def get_client_versions_in_environment(environment):
     return contracts.get_client_versions_in_environment(environment)
 
 
-@app.route('/server/validated-contract/{version}', methods=['POST'])
+@app.route('/server/validated-contract/{contract}/{version}', methods=['POST'])
 def store_server_version_env_info(version):
     pass
 
-@app.route('/server/validated-contract/{version}', methods=['POST'])
-def store_server_version_env_info(version):
+@app.route('/client/validated-contract/{contract}/{version}', methods=['POST'])
+def store_client_version_env_info(version):
     pass
 
 @app.route('/server/environment/{environment}/{version}', methods=['POST'])
