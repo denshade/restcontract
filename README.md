@@ -30,4 +30,28 @@ Before a client can be safely deployed it should confirm its version is compatib
 
 #### Deploying a new provider
 Given a group of clients that are deployed. These deployed clients have a set of client versions. 
-Before a new provider can be deployed it must have confirmed for each of the deployed client contracts it can handle them correctly.  
+Before a new provider can be deployed it must have confirmed for each of the deployed client contracts it can handle them correctly.
+
+## Endpoints
+
+POST /contract
+
+Post a contract
+
+body: 
+```
+{
+ url: "/blog",
+ method: "POST",
+ body: {},
+ state: "noblogs",
+ response: {
+   headers: {status: "204"}
+   body: "OK"
+ }
+}
+```
+required
+
+GET /contract
+Gets all contracts.
