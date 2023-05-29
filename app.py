@@ -1,13 +1,9 @@
 import os
-import uuid
-import json
 from flask import Flask, request, jsonify
 import contracts
 
 app = Flask(__name__)
 data_directory = "data"
-
-app = Flask(__name__)
 
 
 @app.route('/contract', methods=['GET'])
