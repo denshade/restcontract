@@ -22,11 +22,12 @@ For a provider state is initialized and a request is triggered. Only if the resp
 
 ### Deploying safely
 
-A version is deployed to an environment, e.g. development/production.
+Deploying safely is different depending on what is being deployed.
+
 #### Deploying a new consumer
 A deployed provider version is compatible with a set of contracts. The contract server can be queried for those.
 Before a client can be safely deployed it should confirm its version is compatible with the deployed contracts.
 
-#### Deployed a new provider
+#### Deploying a new provider
 Given a group of clients that are deployed. These deployed clients have a set of client versions. 
 Before a new provider can be deployed it must have confirmed for each of the deployed client contracts it can handle them correctly.  
